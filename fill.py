@@ -1,3 +1,4 @@
+import csv
 import json
 import math
 from pprint import pprint
@@ -46,10 +47,19 @@ for user in followers:
             json.dump(followers_filled, f)
     index += 1
 
-with open('followers_filled.csv', 'w') as f:
-    f.write(f"Имя;Username;Подписан на;Постов;Био;Последние фото в 1 день\n")
+with open('followers_filled.csv', 'w', newline='') as f:
+    writer = csv.writer(f, delimiter=';')
+    writer.writerow(['Имя', 'Username', 'Подписан на', 'Постов', 'Био', 'Последние фото в 1 день'])
     for user in followers_filled:
         full_name = user["full_name"].replace('"', "")
         bio = user["biography"].replace('"', "")
-        f.write(f'"{full_name}";{user["username"]};{user["follows"]};{user["posts"]};"{bio}";'
-                f'{1 if user["last_photos_posted_in_one_day"] else 0}\n')
+        writer.writerow([
+            full_name,
+            user["username"],
+            user["follows"],
+            user["posts"],
+            bio,
+            1 if user["last_photos_posted_in_one_day"] else 0
+        ])
+
+print('#готоводело')
